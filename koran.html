@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moving Balls</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #f0f0f0;
+      font-family: Arial, sans-serif;
+      position: relative;
+    }
+
+    .ball {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ff7b7b, #ff3d3d);
+      cursor: pointer;
+    }
+
+    .quote-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      z-index: 10;
+      display: none;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #ff3d3d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .close-button:hover {
+      background: #ff1a1a;
+    }
+  </style>
+</head>
+<body>
+    <h1 style="font-family: 'Amiri', serif; color: #fc5f5f; text-align: center; ">
+       اختر كرة
+      </h1>
+  <!-- Quote Screen -->
+  <div class="quote-screen" id="quoteScreen">
+    <button class="close-button" id="closeButton">اغلاق</button>
+    <div id="quote">"The only way to do great work is to love what you do."</div>
+  </div>
+
+  <script>
+    const numberOfBalls = 10;
+    const balls = [];
+
+    for (let i = 0; i < numberOfBalls; i++) {
+      const ball = document.createElement('div');
+      ball.classList.add('ball');
+      document.body.appendChild(ball);
+
+      // Random initial position
+      let x = Math.random() * (window.innerWidth - 50);
+      let y = Math.random() * (window.innerHeight - 50);
+
+      // Random velocity
+      let vx = (Math.random() - 0.5) * 4;
+      let vy = (Math.random() - 0.5) * 4;
+
+      ball.style.left = `${x}px`;
+      ball.style.top = `${y}px`;
+
+      // Add event listener for showing quote
+      ball.addEventListener('click', showQuote);
+
+      balls.push({ ball, x, y, vx, vy });
+    }
+
+    function animate() {
+      balls.forEach(obj => {
+        obj.x += obj.vx;
+        obj.y += obj.vy;
+
+        // Bounce off walls
+        if (obj.x <= 0 || obj.x >= window.innerWidth - 50) obj.vx *= -1;
+        if (obj.y <= 0 || obj.y >= window.innerHeight - 50) obj.vy *= -1;
+
+        obj.ball.style.left = `${obj.x}px`;
+        obj.ball.style.top = `${obj.y}px`;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Show quote screen
+    const quoteScreen = document.getElementById('quoteScreen');
+    const closeButton = document.getElementById('closeButton');
+
+    function showQuote() {
+      const quotes = [
+        '"وَبَشِّرِ ٱلصَّـٰبِرِينَ ٱلَّذِينَ إِذَآ أَصَـٰبَتْهُم مُّصِيبَةٌۭ قَالُوٓاْ إِنَّا لِلَّهِ وَإِنَّآ إِلَيْهِ رَٰجِعُونَ".',
+        '"فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا إِنَّ مَعَ ٱلْعُسْرِ يُسْرًۭا".',
+        '"وَقُل رَّبِّ ٱرْحَمْهُمَا كَمَا رَبَّيَانِى صَغِيرًۭا".',
+        '"ٱلَّذِينَ ءَامَنُوا۟ وَتَطْمَئِنُّ قُلُوبُهُم بِذِكْرِ ٱللَّهِ ۗ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ".',
+        '"لَا تَحْزَنْ إِنَّ ٱللَّهَ مَعَنَا".',
+        '"وَعَسَىٰٓ أَن تَكْرَهُوا۟ شَيْـًۭٔا وَهُوَ خَيْرٌۭ لَّكُمْ ۖ وَعَسَىٰٓ أَن تُحِبُّوا۟ شَيْـًۭٔا وَهُوَ شَرٌّۭ لَّكُمْ ۗ وَٱللَّهُ يَعْلَمُ وَأَنتُمْ لَا تَعْلَمُونَ".',
+        '"وَعَلَى ٱللَّهِ فَلْيَتَوَكَّلِ ٱلْمُؤْمِنُونَ"',
+        '"وَمَنْ يَتَّقِ ٱللَّهَ يَجْعَل لَّهُۥ مَخْرَجًۭا وَيَرْزُقْهُۥ مِنْ حَيْثُ لَا يَحْتَسِبُ"',
+        '"قَالَ لَا تَخَافَآ إِنَّنِى مَعَكُمَآ أَسْمَعُ وَأَرَىٰ"',
+        '"وَٱصْبِرْ وَمَا صَبْرُكَ إِلَّا بِٱللَّهِ وَلَا تَحْزَنْ عَلَيْهِمْ وَلَا تَكُ فِى ضَيْقٍۢ مِّمَّا يَمْكُرُونَ"',
+        '"إِنَّ رَحْمَتَ ٱللَّهِ قَرِيبٌۭ مِّنَ ٱلْمُحْسِنِينَ"',
+        '"لَا تَدْرِى لَعَلَّ ٱللَّهَ يُحْدِثُ بَعْدَ ذَٰلِكَ أَمْرًا"',
+        '"لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَا"'
+
+      ];
+
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById('quote').innerText = randomQuote;
+      quoteScreen.style.display = 'flex';
+    }
+
+    // Close quote screen
+    closeButton.addEventListener('click', () => {
+      quoteScreen.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
+
