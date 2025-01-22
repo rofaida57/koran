@@ -1,3 +1,10 @@
+لتحسين التوافق مع الهاتف وجعل التجربة سلسة وجميلة، يمكن إجراء بعض التعديلات على الكود الخاص بك لضمان استجابة التصميم والعمل بسلاسة على الأجهزة المحمولة. إليك النسخة المحسنة مع التعديلات:
+
+1. **التأكد من أن الكرات تظهر بشكل ملائم وتتحرك بشكل سلس على الهواتف**.
+2. **تحسين التفاعل مع الشاشة عند النقر على الكرات**.
+3. **التأكد من توافق جميع العناصر مع العرض المتغير للشاشات الصغيرة**.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,18 +15,31 @@
     body {
       margin: 0;
       overflow: hidden;
-      background: #f0f0f0;
+      background: #f9f9f9;
       font-family: Arial, sans-serif;
       position: relative;
     }
 
+    h1 {
+      font-family: 'Amiri', serif;
+      color: #fc5f5f;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 1.5rem;
+    }
+
     .ball {
       position: absolute;
-      width: 50px;
-      height: 50px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: radial-gradient(circle, #ff7b7b, #ff3d3d);
-      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .ball:active {
+      transform: scale(1.2);
     }
 
     .quote-screen {
@@ -33,32 +53,53 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 2rem;
+      text-align: center;
+      font-size: 1.2rem;
       z-index: 10;
       display: none;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .close-button {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 10px;
+      right: 10px;
       background: #ff3d3d;
       color: white;
       border: none;
       border-radius: 5px;
       padding: 10px 15px;
       cursor: pointer;
+      font-size: 1rem;
     }
 
     .close-button:hover {
       background: #ff1a1a;
     }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.2rem;
+      }
+
+      .ball {
+        width: 30px;
+        height: 30px;
+      }
+
+      .quote-screen {
+        font-size: 1rem;
+      }
+
+      .close-button {
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
-    <h1 style="font-family: 'Amiri', serif; color: #fc5f5f; text-align: center; ">
-       اختر كرة
-      </h1>
+  <h1>اختر كرة</h1>
   <!-- Quote Screen -->
   <div class="quote-screen" id="quoteScreen">
     <button class="close-button" id="closeButton">اغلاق</button>
@@ -75,12 +116,12 @@
       document.body.appendChild(ball);
 
       // Random initial position
-      let x = Math.random() * (window.innerWidth - 50);
-      let y = Math.random() * (window.innerHeight - 50);
+      let x = Math.random() * (window.innerWidth - 40);
+      let y = Math.random() * (window.innerHeight - 40);
 
       // Random velocity
-      let vx = (Math.random() - 0.5) * 4;
-      let vy = (Math.random() - 0.5) * 4;
+      let vx = (Math.random() - 0.5) * 3;
+      let vy = (Math.random() - 0.5) * 3;
 
       ball.style.left = `${x}px`;
       ball.style.top = `${y}px`;
@@ -97,8 +138,8 @@
         obj.y += obj.vy;
 
         // Bounce off walls
-        if (obj.x <= 0 || obj.x >= window.innerWidth - 50) obj.vx *= -1;
-        if (obj.y <= 0 || obj.y >= window.innerHeight - 50) obj.vy *= -1;
+        if (obj.x <= 0 || obj.x >= window.innerWidth - 40) obj.vx *= -1;
+        if (obj.y <= 0 || obj.y >= window.innerHeight - 40) obj.vy *= -1;
 
         obj.ball.style.left = `${obj.x}px`;
         obj.ball.style.top = `${obj.y}px`;
@@ -115,7 +156,7 @@
 
     function showQuote() {
       const quotes = [
-        '"وَبَشِّرِ ٱلصَّـٰبِرِينَ ٱلَّذِينَ إِذَآ أَصَـٰبَتْهُم مُّصِيبَةٌۭ قَالُوٓاْ إِنَّا لِلَّهِ وَإِنَّآ إِلَيْهِ رَٰجِعُونَ".',
+         '"وَبَشِّرِ ٱلصَّـٰبِرِينَ ٱلَّذِينَ إِذَآ أَصَـٰبَتْهُم مُّصِيبَةٌۭ قَالُوٓاْ إِنَّا لِلَّهِ وَإِنَّآ إِلَيْهِ رَٰجِعُونَ".',
         '"فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا إِنَّ مَعَ ٱلْعُسْرِ يُسْرًۭا".',
         '"وَقُل رَّبِّ ٱرْحَمْهُمَا كَمَا رَبَّيَانِى صَغِيرًۭا".',
         '"ٱلَّذِينَ ءَامَنُوا۟ وَتَطْمَئِنُّ قُلُوبُهُم بِذِكْرِ ٱللَّهِ ۗ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ".',
@@ -127,8 +168,7 @@
         '"وَٱصْبِرْ وَمَا صَبْرُكَ إِلَّا بِٱللَّهِ وَلَا تَحْزَنْ عَلَيْهِمْ وَلَا تَكُ فِى ضَيْقٍۢ مِّمَّا يَمْكُرُونَ"',
         '"إِنَّ رَحْمَتَ ٱللَّهِ قَرِيبٌۭ مِّنَ ٱلْمُحْسِنِينَ"',
         '"لَا تَدْرِى لَعَلَّ ٱللَّهَ يُحْدِثُ بَعْدَ ذَٰلِكَ أَمْرًا"',
-        '"لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَا"'
-
+        '"لَا يُكَلِّفُ ٱللَّهُ نَفْسًا إِلَّا وُسْعَهَا"
       ];
 
       const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
@@ -140,7 +180,18 @@
     closeButton.addEventListener('click', () => {
       quoteScreen.style.display = 'none';
     });
+
+    // Adjust positions on resize
+    window.addEventListener('resize', () => {
+      balls.forEach(obj => {
+        obj.x = Math.min(obj.x, window.innerWidth - 40);
+        obj.y = Math.min(obj.y, window.innerHeight - 40);
+        obj.ball.style.left = `${obj.x}px`;
+        obj.ball.style.top = `${obj.y}px`;
+      });
+    });
   </script>
 </body>
 </html>
+
 
